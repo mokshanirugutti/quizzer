@@ -1,10 +1,9 @@
-import StudyAnimation from '@/components/lottieAnimations/StudyAnimation'
 import React from 'react'
+import StudyAnimation from '@/components/lottieAnimations/StudyAnimation'
 import { Link } from 'react-router'
-
-const Home :React.FC = () => {
+const HeroSection : React.FC = () => {
   return (
-    <div className='pagePadding flex justify-around items-center py-10 w-full '>
+    <div className='pagePadding flex md:flex-row flex-col justify-around items-center w-full md:mb-20 md:pb-20'>
         <div className='flex flex-col gap-3 w-1/2'>
             <h1 className='text-4xl font-bold'>Welcome to <span className='text-[#00b8ff]'>Quizzer</span></h1>
             <p className='w-2/3 text-primary/80'>Enhance your learning experience with Quizzer. Test your knowledge and boost your skills with our interactive quizzes.</p>
@@ -21,4 +20,4 @@ const Home :React.FC = () => {
   )
 }
 
-export default Home
+export default HeroSection

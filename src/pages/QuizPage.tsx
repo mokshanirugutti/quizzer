@@ -7,12 +7,19 @@ import { AnimatePresence } from 'framer-motion';
 import { CircularProgress } from '@heroui/react';
 import { useNavigate } from 'react-router';
 
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const QuizPage: React.FC = () => {
   const [quiz, setQuiz] = useState<QuizData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
   const [userAnswers, setUserAnswers] = useState<{ [key: number]: number }>({});
+  const [timeLeft, setTimeLeft] = useState<number>(600);
+  const [streak, setStreak] = useState<number>(0); 
 
   const navigate = useNavigate();
 
@@ -31,6 +38,29 @@ const QuizPage: React.FC = () => {
     loadQuizData();
   }, []);
 
+   // Timer logic
+   useEffect(() => {
+    if (timeLeft === 0) {
+      handleFinishQuiz(); // Automatically finish quiz when time runs out
+      return;
+    }
+
+    const timer = setInterval(() => {
+      setTimeLeft((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  useEffect(() => {
+    if (streak === 5) {
+      toast.success('🎉 You earned the Streak Master badge!', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
+    }
+  }, [streak]);
+
   const handleNextQuestion = () => {
     if (quiz && currentQuestionIndex < quiz.questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
@@ -42,12 +72,17 @@ const QuizPage: React.FC = () => {
     
     const score = calculateScore(quiz.questions, userAnswers);
 
+      // Award bonus points if time is left
+      const bonusPoints = Math.floor(timeLeft / 10); // 1 point for every 10 seconds left
+      const totalScore = score + bonusPoints;
+
     // Navigate to results page with quiz data, user answers, and score
     navigate('/results', {
       state: {
         quiz,
         userAnswers,
-        score,
+        score: totalScore,
+        timeLeft,
       },
     });
 
@@ -73,6 +108,16 @@ const QuizPage: React.FC = () => {
   };
 
   const handleAnswerSelect = (questionId: number, optionId: number) => {
+    
+    const correctOption = quiz?.questions.find((q) => q.id === questionId)?.options.find((o) => o.is_correct);
+
+    // udpate streak values 
+    if (correctOption?.id === optionId) {
+      setStreak((prev) => prev + 1); 
+    } else {
+      setStreak(0); 
+    }
+
     setUserAnswers((prevAnswers) => ({
       ...prevAnswers,
       [questionId]: optionId, 
@@ -108,6 +153,7 @@ const QuizPage: React.FC = () => {
 
   return (
     <div className="pagePadding">
+      <ToastContainer />
       <div className="flex justify-around items-center">
         <div>
           <h1 className="text-xl my-3 font-medium">Title: {quiz.title}</h1>
@@ -125,6 +171,21 @@ const QuizPage: React.FC = () => {
           value={currentQuestionIndex + 1}
         />
       </div>
+
+
+      {/* Timer */}
+      <div className="text-center my-4">
+        <p className="text-lg font-medium">
+          Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
+        </p>
+      </div>
+
+      {/* Streak */}
+      <div className="text-center my-4">
+        <p className="text-lg font-medium">Streak: {streak}</p>
+      </div>
+
+
       <AnimatePresence mode="wait">
         <QuestionComponent
           question={currentQuestion}
