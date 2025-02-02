@@ -15,7 +15,7 @@ const HeroSection: React.FC = () => {
             and boost your skills with our interactive quizzes.
           </p>
 
-          <div className="flex  gap-3 md:flex-row flex-col">
+          <div className="flex  gap-3 ">
             <Link to="/quiz">
               <button className="px-3 py-2 rounded-md border-2 border-foreground bg-foreground text-background w-40 font-semibold cursor-pointer hover:-translate-y-1 transition duration-150 ease-in-out">
                 Start Quiz
