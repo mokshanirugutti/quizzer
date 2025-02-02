@@ -2,12 +2,14 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { QuizData, } from '../types';
 
-import DetailedSolutionPopup from '@/components/DetailedSolutionPopup';
+import DetailedSolutionPopup from '@/components/quiz/DetailedSolutionPopup';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 
 
-import badgeLogo from '@/assets/perfectBadge.png';
+import perfectScore from '@/assets/perfectScore.webp';
+import Learned from '@/assets/learned.webp';
+import speedSter from '@/assets/speedster.webp';
 
 interface ResultsPageProps {
   quiz: QuizData;
@@ -42,7 +44,7 @@ const ResultsPage: React.FC = () => {
     {
       name: 'Perfect Score',
       description: 'Answered all questions correctly!',
-      image: '/images/quizzer_logo.webp',
+      image: perfectScore,
       condition: (quiz, userAnswers, _timeLeft) => {
         const correctAnswers = quiz.questions.filter(
           (question) => userAnswers[question.id] === question.options.find((option) => option.is_correct)?.id
@@ -53,13 +55,13 @@ const ResultsPage: React.FC = () => {
     {
       name: 'Speedster',
       description: 'Finished the quiz with more than 5 minutes left!',
-      image: badgeLogo,
+      image: speedSter,
       condition: (_score, _streak, timeLeft) => timeLeft > 300,
     },
     {
       name: 'Streak Master',
       description: 'Achieved a streak of 5 or more correct answers!',
-      image: './quizzer_logo.webp',
+      image: Learned,
       condition: (quiz, userAnswers, _timeLeft) => {
         let currentStreak = 0;
         let maxStreak = 0;
@@ -92,12 +94,12 @@ const ResultsPage: React.FC = () => {
       <h1 className="text-2xl font-bold text-center my-5">Quiz Results</h1>
       <div className="bg-foreground p-6 rounded-lg shadow-md text-background max-w-2xl mx-auto">
         
-        <div className='flex gap-3 justify-around'>
+        <div className='flex flex-col gap-3 justify-around'>
 
           {/* Score  */}
-          <div className=''>
           <h2 className="text-xl font-semibold mb-4">Score</h2>
-            <p className="text-lg">
+          <div className='flex gap-3'>
+            <p className="text-base">
               Total : <span className="font-bold">{score}</span>
             </p>
             <p className="text-base">
@@ -119,8 +121,8 @@ const ResultsPage: React.FC = () => {
           </div>
 
           {/* Badges Section */}
-          <div className=" mb-6">
-            <h2 className="text-xl font-semibold mb-4">Badges</h2>
+          <h2 className="text-xl font-semibold mb-4">Badges</h2>
+          <div className="flex justify-around gap-3 mb-6 flex-wrap">
             {earnedBadges.length > 0 ? (
               earnedBadges.map((badge, index) => (
                 <motion.div
@@ -133,7 +135,7 @@ const ResultsPage: React.FC = () => {
                 <img
                 src={badge.image}
                 alt={badge.name}
-                className="w-12 h-12 cursor-pointer"
+                className="w-40 cursor-pointer"
                 
               />
               </motion.div>
@@ -155,7 +157,7 @@ const ResultsPage: React.FC = () => {
 
           return (
             <div key={question.id} className="mb-6 p-4 border rounded-lg shadow-sm">
-              <h3 className="text-lg font-medium">{question.description}</h3>
+              <h3 className="text-base md:text-lg font-medium">{question.description}</h3>
               <div className='flex justify-between'>
                 <div>
                   <p className={`text-sm ${isCorrect ? 'text-green-600' : 'text-red-600'}`}>
@@ -166,7 +168,7 @@ const ResultsPage: React.FC = () => {
                   </p>
                 </div>
 
-                <div>
+                <div className='mt-auto'>
                 <DetailedSolutionPopup detailedSolution={question.detailed_solution} />
                 </div>
               </div>

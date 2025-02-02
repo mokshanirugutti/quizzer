@@ -5,8 +5,8 @@ import { Link } from "react-router";
 const ExploreSection: React.FC = () => {
   return (
     <div className="pagePadding h-96">
-      <div className="text-center w-fit mx-auto">
-        <h1 className="text-xl md:text-4xl font-semibold my-1 tracking-normal">
+      <div className="text-center w-fit mx-auto mt-10">
+        <h1 className="text-2xl md:text-4xl font-semibold my-1 tracking-normal">
           Need time for preparation
         </h1>
         <p className="text-foreground/80 my-2 mx-auto mb-5">

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { fetchQuizData } from '../services/quizService';
 import { QuizData, Question } from '../types';
 import { LineWave } from 'react-loader-spinner';
-import QuestionComponent from '@/components/QuestionComponent';
+import QuestionComponent from '@/components/quiz/QuestionComponent';
 import { AnimatePresence } from 'framer-motion';
 import { CircularProgress } from '@heroui/react';
 import { useNavigate } from 'react-router';
@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import InstructionsPopup from '@/components/quiz/InstructionsPopup';
 
 
 const QuizPage: React.FC = () => {
@@ -152,7 +153,7 @@ const QuizPage: React.FC = () => {
   const isLastQuestion = currentQuestionIndex === quiz.questions.length - 1;
 
   return (
-    <div className="pagePadding">
+    <div className="pagePadding pb-20 pt-5">
       <ToastContainer />
       <div className="flex justify-around items-center">
         <div>
@@ -174,19 +175,24 @@ const QuizPage: React.FC = () => {
 
 
       {/* Timer */}
-      <div className="text-center my-4">
-        <p className="text-lg font-medium">
-          Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
-        </p>
-      </div>
+      <div className='flex justify-around '>
 
-      {/* Streak */}
+        <div className="text-center my-4">
+          <p className="text-lg font-medium">
+            Time Left: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? `0${timeLeft % 60}` : timeLeft % 60}
+          </p>
+        </div>
+        
+        <InstructionsPopup totalQuestions={quiz.questions.length} correctPoints={quiz.correct_answer_marks} incorrectPoints={quiz.negative_marks}/>
+
+      </div>
+      {/* Streak
       <div className="text-center my-4">
         <p className="text-lg font-medium">Streak: {streak}</p>
-      </div>
+      </div> */}
 
 
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" >
         <QuestionComponent
           question={currentQuestion}
           onNext={isLastQuestion ? handleFinishQuiz : handleNextQuestion}

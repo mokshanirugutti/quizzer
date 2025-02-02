@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import NextButton from './ui/NextButton';
+import NextButton from '@/components/ui/NextButton';
 import { motion } from 'framer-motion';
 
 interface QuestionComponentProps {
