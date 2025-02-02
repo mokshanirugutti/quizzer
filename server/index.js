@@ -1,17 +1,13 @@
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
-require('dotenv').config();
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
 // Enable CORS for your frontend
-app.use(cors({
-  origin: ['http://localhost:5173', 'https://app-quizzzer.netlify.app'],
-  methods: ['GET', 'POST'],
-  credentials: true
-}));
+app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -66,8 +62,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`Current timestamp: ${new Date().toISOString()}`);
 }); 
