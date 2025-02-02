@@ -68,7 +68,7 @@ Make sure you have Node.js installed (version 14 or higher recommended).
 ## 📦 Project Structure
 
 ```
-quiz/
+quizzer/
 ├── src/
 │   ├── components/    # Reusable UI components
 │   ├── pages/        # Page components
